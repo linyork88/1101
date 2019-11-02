@@ -8,7 +8,6 @@
     <style>
     .dialog{
         width: 300px;
-        padding: 20px;
         background-color: #dddddd;
         border: 1px solid #888888;
         box-shadow: 0px 0px 5px #888888;
@@ -18,6 +17,15 @@
         display: none;
         z-index:10;
     }
+    .dialog>.header{
+        background-color: #444444;padding:10px;
+        color:white;font-weight:bold;
+        cursor:move
+    }
+    .dialog>.content{
+        padding:10px;
+    }
+
     .dialog-mask{
         position: fixed; top:0px; left:0px; width: 100%; height:100%;
         background-color: black;opacity:0.5;
@@ -28,16 +36,50 @@
 </head>
 <body>
     <h3>Draggable Dialog</h3>
-    <button onclick="openDialog();">Open</button>
+    <button onclick="openDialog('這是一個對話框');">Open</button>
     <div style="height:1000px;background-color:#ffcccc;">Layout</div>
-    <div id="dialog" class="dialog"></div>
-    <div id="dialog-mask" class="dialog-mask"></div>
+    <div id="dialog" class="dialog">
+        <div id="dialog-header" class="header">對話框標題</div>
+        <div id="dialog-content" class="content" >對話框內容</div>
+    </div>
+    <div id="dialog-mask" class="dialog-mask" onclick="closeDialog();"></div>
     <script>
         let dialog=document.querySelector("#dialog"); //先取得標籤，存放在變數中
+        let dialogHeader=document.querySelector("#dialog-header");
         let dialogMask=document.querySelector("#dialog-mask");
-        function openDialog(){
+        //處裡拖曳
+        // 當使用者按住對話框，對話框可以跟著滑鼠移動
+        let differX;
+        let differY;
+        function drag(e){
+            //計算、紀錄滑鼠座標和對話框左上角的距離
+            differX=e.clientX-dialog.offsetLeft;
+            differY=e.clientY-dialog.offsetTop;
+            //在整份網頁文件(document) 上座滑鼠移動事件處理，持續追蹤滑鼠位置
+            document.addEventListener("mousemove",move);
+        };
+        function move(e){
+            e.preventDefault();//阻止瀏覽器預設的事件處理發生
+            dialog.style.left=(e.clientX-differX)+"px";
+            dialog.style.top=(e.clientY-differY)+"px";
+        };
+        function drop(){
+            document.removeEventListener("mousemove",move)
+        };
+        dialogHeader.addEventListener("mousedown", drag);
+        dialogHeader.addEventListener("mouseup", drop);
+
+        //處裡對話框開關
+        function openDialog(content){
+            let dialogContent=document.querySelector("#dialog-content")
+            dialogContent.innerHTML=content;
+            //顯示對話框
             dialog.style.display="block";
             dialogMask.style.display="block";
+        }
+        function closeDialog(){
+            dialog.style.display="none";
+            dialogMask.style.display="none";
         }
     </script>
 </body>
