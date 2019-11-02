@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>javascript</title>
+</head>
+<body>
+    <div id="content">Hello HTML DOM</div>
+    <button onclick="go();">click</button>
+    <script>
+        function go(){
+            //操作 HTML DOM (網頁畫面)
+            //1. 取得有興趣標籤
+            let elem=document.querySelector("#content");//#代表ID
+            //2.修改標籤屬性或CSS達成目的
+            elem.innerHTML="Hello Event Handling";
+            elem.style.backgroundColor="#ffcccc";
+            //3.在標籤上做事件處理 (Event Handling)
+            // 標籤.addEventListener(事件名稱,處理函式);
+            //事件名稱：click, dblclick, mousecover, mouseout, mousedown, mouseup, mousemove ;
+            //事件物件：處理函式的第一個參數
+            elem.addEventListener("dblclick", function(){
+                elem.style.display="none";
+            });
+            elem.addEventListener("mousedown", function(e){
+                console.log(e.clientX, e.clientY);
+                elem.style.fontSize=(e.clientX/10)+"px";
+                elem.style.color="red";
+            });
+            elem.addEventListener("mouseup", function(){
+                elem.style.color="black";
+            });
+            elem.addEventListener("mousemove", function(e){
+                //console.log(e.clientX, e.clientY);
+                let r=255*(e.clientX/window.innerWidth);
+                elem.style.backgroundColor="rgb("+r+",128,128)";
+            });
+        }
+        // 資料、變數、運算符號、流程控制
+        // 函式：建立/使用函式、參數、回傳值
+        //將函式本身傳到參數中
+        /*
+        function add(n1,n2,callback){
+            callback (n1+n2);
+        }
+        function handle(result){
+            console.log(result);
+        }
+        add(3,4,handle);
+        add(5,6,function(result){ //匿名函式
+            document.body.innerHTML=result;
+        })
+        */
+        /*
+        函式是一種資料
+
+        function add(n1,n2){
+            return n1+n2;
+            }
+        let newName=add;
+        let result=newName(3,4);
+        console.log(result);
+            有點像是
+                let x=3;
+                let y=x;
+                console.log(y);
+        */
+        /*
+        console.log(add);// 直接印出函式本身(就算印出一個資料)
+        console.log(add(3,4));// 呼叫函式，得到一個回傳值
+        let result=add(3,4);
+        console.log(result);
+        */
+
+        </script>
+    
+</body>
+</html>
